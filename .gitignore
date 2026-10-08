@@ -1,0 +1,14 @@
+# 视频（体积大，不入库）
+*.mp4
+
+# 运行时生成的文件
+对答案系统/缓存/
+对答案报告.html
+我的作答/
+
+# Python
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/

@@ -1,0 +1,13 @@
+numpy<2
+pandas
+matplotlib
+seaborn
+scikit-learn
+xgboost
+imbalanced-learn
+onnx
+onnxruntime
+pillow
+scipy
+jupyter
+notebook

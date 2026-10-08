@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>AI训练师三级操作题模拟题库</title>
+    <style>
+        /* 新增水印样式 */
+        .watermark {
+            position: fixed;
+            pointer-events: none;
+            font-size: 32px;
+            color: rgba(25, 118, 210, 0.15);
+            transform: rotate(-15deg);
+            z-index: -1; /* 置于底层 */
+        }
+    </style>
+</head>
+<body>
+
+
+    <!-- 新增水印 -->
+    <div class="watermark" style="top:10%; left:5%">精彩AI，为您赋能AI职业</div>
+    <div class="watermark" style="top:15%; right:5%">精彩AI，为您赋能AI职业</div>
+    <div class="watermark" style="top:30%; left:20%">精彩AI，为您赋能AI职业</div>
+    <div class="watermark" style="top:40%; right:15%">精彩AI，为您赋能AI职业</div>
+    <div class="watermark" style="top:55%; left:10%">精彩AI，为您赋能AI职业</div>
+    <div class="watermark" style="top:60%; right:25%">精彩AI，为您赋能AI职业</div>
+    <div class="watermark" style="top:75%; left:30%">精彩AI，为您赋能AI职业</div>
+    <div class="watermark" style="top:85%; right:5%">精彩AI，为您赋能AI职业</div>
+    <div class="watermark" style="top:90%; left:45%">精彩AI，为您赋能AI职业</div>
+    <div class="watermark" style="top:25%; left:50%">精彩AI，为您赋能AI职业</div>
+
+
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>AI训练师题库系统</title>
+    <style>
+        body {
+            font-family: '微软雅黑', Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+
+        /* 标题样式 */
+        /* 原代码找到这部分替换 */
+h1 {
+    font-size: 2.5em;
+    text-align: center;
+    margin: 0.8em auto 1.5em; /* 增加上边距 */
+    padding: 15px;
+    background: linear-gradient(135deg, #2A2F45 0%, #3D405B 100%); /* 深蓝灰渐变 */
+    color: #E6AF2E; /* 琥珀金 */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    border: 1px solid rgba(230,175,46,0.3); /* 添加金属质感边框 */
+}
+
+/* 修改按钮样式部分 */
+.question-btn {
+    padding: 18px;
+    font-size: 16px;
+    background: linear-gradient(145deg, #2A2F45 0%, #3D405B 100%); /* 深色渐变 */
+    color: #E6AF2E; /* 琥珀金 */
+    border: 1px solid rgba(230,175,46,0.2); /* 细边框 */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.question-btn:hover {
+    background: linear-gradient(145deg, #3D405B 0%, #2A2F45 100%); /* 反转渐变方向 */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+    color: #FFD700; /* 悬停时更亮的金色 */
+}
+
+        /* 网格容器 */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+            /* 章节分隔 */
+        .chapter-separator {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 10px;
+            margin: 20px 0;
+            background-color: #95a5a6;
+            color: white;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>人工智能训练师三级操作题题库模拟</h1>
+    
+    <div class="grid-container">
+        <!-- 动态生成按钮 -->
+        <script>
+            // 章节配置
+            const chapters = [
+                { chapter: 1, sections: [1, 2], questions: 5 },
+                { chapter: 2, sections: [1, 2], questions: 5 },
+                { chapter: 3, sections: [1, 2], questions: 5 },{ chapter: 4, sections: [1, 2], questions: 5 }
+            ];
+
+            // 生成按钮
+            chapters.forEach((chap, chapIndex) => {
+                // 添加章节分隔符
+                const separator = document.createElement('div');
+                separator.className = 'chapter-separator';
+                separator.textContent = `第${chap.chapter}章`;
+                document.body.appendChild(separator);
+
+                // 创建网格容器
+                const grid = document.createElement('div');
+                grid.className = 'grid-container';
+                
+                chap.sections.forEach((sec, secIndex) => {
+                    for(let q=1; q<=chap.questions; q++) {
+                        const btn = document.createElement('button');
+                        btn.className = 'question-btn';
+                        btn.textContent = `${chap.chapter}.${sec}.${q}`;
+                        
+                        // 绑定点击事件
+                        btn.onclick = () => {
+                            const filename = `${chap.chapter}.${sec}.${q}.html`;
+                            window.open(`files/${filename}`, '_blank');
+                        };
+                        
+                        grid.appendChild(btn);
+                    }
+                });
+                
+                document.body.appendChild(grid);
+            });
+        </script>
+    </div>
+</body>
+</html>
