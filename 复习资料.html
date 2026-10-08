@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>人工智能训练师三级 · 编程题复习资料</title>
+<style>
+body{font-family:'Microsoft YaHei',Arial,sans-serif;margin:0;background:#f0f2f5;color:#2c3e50;line-height:1.75;}
+.header{background:linear-gradient(135deg,#2A2F45,#3D405B);color:#E6AF2E;padding:26px 40px;}
+.header h1{margin:0;font-size:25px;}
+.header .sub{color:#cfd3e4;font-size:13.5px;margin-top:8px;}
+.wrap{max-width:1080px;margin:20px auto;padding:0 18px;}
+.toc{background:#fff;border-radius:10px;padding:16px 24px;box-shadow:0 2px 6px rgba(0,0,0,.08);margin-bottom:18px;}
+.toc a{display:inline-block;margin:4px 14px 4px 0;color:#2980b9;text-decoration:none;font-size:14px;}
+.toc a:hover{text-decoration:underline;}
+.box{background:#fff;border-radius:10px;padding:8px 26px 22px;box-shadow:0 2px 6px rgba(0,0,0,.08);margin-bottom:20px;}
+h2{border-left:5px solid #E6AF2E;padding-left:12px;font-size:20px;margin-top:26px;}
+h3{font-size:16.5px;color:#2A2F45;border-bottom:2px solid #f0e6c8;padding-bottom:6px;margin-top:30px;}
+h4{margin:18px 0 8px;font-size:15px;}
+.kp{border:1px solid #e8ebee;border-radius:8px;padding:14px 18px;margin:14px 0;background:#fdfdfd;}
+.kp .name{font-family:Consolas,monospace;font-weight:700;font-size:15px;color:#1a5276;}
+.sig{font-family:Consolas,monospace;font-size:13px;color:#7d3c98;background:#f8f4fb;border-radius:4px;padding:2px 8px;display:inline-block;margin:4px 0;}
+pre{background:#2A2F45;color:#ecf0f1;border-radius:6px;padding:13px 16px;overflow:auto;font-size:13px;font-family:Consolas,'Courier New',monospace;white-space:pre-wrap;margin:8px 0;}
+pre .c{color:#7f8c8d;}
+pre .k{color:#e67e22;}
+pre .s{color:#58d68d;}
+code{font-family:Consolas,monospace;background:#f0f3f5;padding:1px 6px;border-radius:4px;font-size:13px;}
+.qtag{display:inline-block;background:#eaf2f8;color:#2471a3;border-radius:10px;padding:1px 10px;font-size:12px;margin:2px 4px 2px 0;}
+.freq{display:inline-block;background:#fef9e7;color:#b7950b;border-radius:10px;padding:1px 10px;font-size:12px;margin-left:8px;}
+.note{background:#fef9e7;border:1px solid #f7dc6f;border-radius:6px;padding:10px 14px;font-size:13.5px;margin:10px 0;}
+.warn{background:#fdedec;border:1px solid #f5b7b1;border-radius:6px;padding:10px 14px;font-size:13.5px;margin:10px 0;}
+table{border-collapse:collapse;width:100%;font-size:13.5px;margin:10px 0;}
+th{background:#2A2F45;color:#E6AF2E;padding:8px 12px;text-align:left;}
+td{border-bottom:1px solid #ecf0f1;padding:7px 12px;}
+tr:hover td{background:#fafbfc;}
+.tm{font-family:Consolas,monospace;font-size:13px;background:#f6f8fa;border:1px solid #e1e4e8;border-radius:6px;padding:3px 8px;}
+.tpl{border:2px dashed #bdc3c7;border-radius:10px;padding:14px 20px;margin:14px 0;}
+.tpl h4{margin-top:4px;color:#8e44ad;}
+@media print{.toc{display:none}body{background:#fff}.box{box-shadow:none;border:1px solid #ddd}}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>人工智能训练师（三级）· 编程题复习资料</h1>
+<div class="sub">覆盖 19 道编程真题全部考点（1.1.x 数据处理 · 2.1.x 清洗标注 · 2.2.x 模型开发 · 3.2.x 部署推理）| 每个考点标注真题出处与考频</div>
+</div>
+<div class="wrap">
+
+<div class="toc">
+<b>目录：</b>
+<a href="#ch1">第一章 业务数据处理</a>
+<a href="#ch2a">第二章（上）数据清洗与标注</a>
+<a href="#ch2b">第二章（下）模型开发与测试</a>
+<a href="#ch3">第三章 模型部署与推理</a>
+<a href="#freq">高频考点速查表</a>
+<a href="#tpl">考试代码模板</a>
+<a href="#pit">易错点清单</a>
+</div>
+
+<!-- ==================== 第一章 ==================== -->
+<div class="box" id="ch1">
+<h2>第一章 业务数据处理流程（1.1.1 ~ 1.1.5）</h2>
+<p>考试形式：读取 CSV 数据集 → 统计分析（分组/分箱/频次）→ 数据审核与清洗 → 保存结果。核心是 <b>pandas + numpy</b> 的组合使用。</p>
+
+<h3>1.1 数据读写</h3>
+
+<div class="kp">
+<span class="name">pd.read_csv() / pd.read_excel()</span><span class="freq">考频 ★★★★★（11次）</span><br>
+<span class="sig">pd.read_csv('文件.csv', encoding='gbk') &nbsp;|&nbsp; pd.read_excel('文件.xlsx')</span><br>
+读取数据文件为 DataFrame。中文数据乱码时加 <code>encoding='gbk'</code>（2.1.4 真题）。
+<pre><span class="c"># 读 CSV（1.1.1 医疗数据）</span>
+data = pd.read_csv('patient_data.csv')
+<span class="c"># 读 Excel（2.1.2 低碳生活数据）</span>
+data = pd.read_excel('大学生低碳生活行为的影响因素数据集.xlsx')
+<span class="c"># 读中文 CSV 乱码时（2.1.4 医疗数据）</span>
+data = pd.read_csv('medical_data.csv', encoding='gbk')</pre>
+<div><span class="qtag">1.1.1</span><span class="qtag">1.1.2</span><span class="qtag">1.1.3</span><span class="qtag">1.1.4</span><span class="qtag">1.1.5</span><span class="qtag">2.1.1</span><span class="qtag">2.2.x</span></div>
+</div>
+
+<div class="kp">
+<span class="name">df.head() / df.info() / df.dtypes / df.describe()</span><span class="freq">考频 ★★★★★（head 6次）</span><br>
+<span class="sig">df.head(n=5) &nbsp;|&nbsp; df.info() &nbsp;|&nbsp; df.dtypes &nbsp;|&nbsp; df.describe()</span><br>
+数据概览四件套：前 n 行 / 表结构与类型 / 每列类型 / 数值统计（均值、分位数等）。审核数据第一步。
+<pre>print(data.head())        <span class="c"># 前5行</span>
+print(data.dtypes)        <span class="c"># 每列数据类型</span>
+print(data.info())        <span class="c"># 表结构、非空数量</span>
+print(data.describe())    <span class="c"># 数值列统计摘要</span></pre>
+<div><span class="qtag">1.1.4</span><span class="qtag">1.1.5</span><span class="qtag">2.1.1</span><span class="qtag">2.1.4</span><span class="qtag">2.1.5</span></div>
+</div>
+
+<div class="kp">
+<span class="name">df.to_csv()</span><span class="freq">考频 ★★★★★（12次，几乎必考）</span><br>
+<span class="sig">df.to_csv('结果文件.csv', index=False)</span><br>
+保存结果。<b>必须写 <code>index=False</code></b>，否则会多出一列行号（考试扣分点）。
+<pre>cleaned_data.to_csv('cleaned_sensor_data.csv', index=False)</pre>
+<div><span class="qtag">1.1.2</span><span class="qtag">1.1.3</span><span class="qtag">1.1.5</span><span class="qtag">2.1.1</span><span class="qtag">2.1.2</span><span class="qtag">2.1.3</span><span class="qtag">2.1.4</span></div>
+</div>
+
+<h3>1.2 条件判断与筛选</h3>
+
+<div class="kp">
+<span class="name">np.where()</span><span class="freq">考频 ★★★★</span><br>
+<span class="sig">np.where(条件, 真值, 假值)</span><br>
+向量化的 if-else：条件为真取第二个参数，否则取第三个。<b>三个参数缺一不可</b>。
+<pre><span class="c"># 按住院天数划分风险等级（1.1.1）</span>
+data['RiskLevel'] = np.where(data['DaysInHospital'] &gt; 7, '高风险患者', '低风险患者')
+
+<span class="c"># 标记传感器异常值（1.1.2）——注意 & | 组合条件要加括号</span>
+data['is_abnormal'] = np.where(
+    ((data['SensorType']=='Temperature') &amp; ((data['Value']&lt;-10) | (data['Value']&gt;50))) |
+    ((data['SensorType']=='Humidity') &amp; ((data['Value']&lt;0) | (data['Value']&gt;100))),
+    True, False)</pre>
+<div><span class="qtag">1.1.1</span><span class="qtag">1.1.2</span></div>
+</div>
+
+<div class="kp">
+<span class="name">s.between(a, b)</span><span class="freq">考频 ★★★★</span><br>
+<span class="sig">series.between(下界, 上界) &nbsp;<span style="color:#7f8c8d"># 含边界</span></span><br>
+范围判断，等价于 <code>(s &gt;= a) &amp; (s &lt;= b)</code>。数据合理性审核的主力。
+<pre><span class="c"># 审核字段合理性（1.1.3）</span>
+data['is_age_valid'] = data['Age'].between(18, 70)
+data['is_credit_score_valid'] = data['CreditScore'].between(300, 850)
+
+<span class="c"># 筛选合理数据（1.1.5）——多条件用 & 连接</span>
+data = data[(data['Age'].between(18, 70)) &amp;
+            (data['Speed'].between(0, 200)) &amp;
+            (data['TravelDistance'].between(1, 1000))]</pre>
+<div><span class="qtag">1.1.3</span><span class="qtag">1.1.4</span><span class="qtag">1.1.5</span></div>
+</div>
+
+<div class="kp">
+<span class="name">布尔索引与取反 ~</span><span class="freq">考频 ★★★★</span><br>
+<span class="sig">df[条件] &nbsp;|&nbsp; df[~条件] &nbsp;|&nbsp; s.isin([值1, 值2])</span><br>
+用条件表达式直接筛选行；<code>~</code> 取反（选不合理数据）；<code>isin</code> 匹配多个值。
+<pre><span class="c"># 只保留合理数据（1.1.3）</span>
+cleaned_data = data[data['is_valid']]
+<span class="c"># 找出不合理数据（取反）</span>
+invalid_rows = data[~data['is_valid']]
+
+<span class="c"># 筛选温度和湿度两类传感器（1.1.2）</span>
+data[data['SensorType'].isin(['Temperature', 'Humidity'])]</pre>
+<div><span class="qtag">1.1.2</span><span class="qtag">1.1.3</span><span class="qtag">1.1.5</span></div>
+</div>
+
+<h3>1.3 统计与聚合</h3>
+
+<div class="kp">
+<span class="name">s.value_counts()</span><span class="freq">考频 ★★★★</span><br>
+<span class="sig">df['列名'].value_counts()</span><br>
+统计每个值出现的次数（频次统计）。<b>注意拼写是 value_counts（带 s）</b>——真题高频失分点。
+<pre><span class="c"># 统计风险等级患者数（1.1.1）</span>
+risk_counts = data['RiskLevel'].value_counts()
+print(risk_counts['高风险患者'])
+
+<span class="c"># 统计交通事件发生次数（1.1.5）</span>
+traffic_event_counts = data['TrafficEvent'].value_counts()
+
+<span class="c"># 分组后再统计频次（2.1.4）</span>
+treatment_outcome_distribution = data.groupby('疾病类型')['治疗结果'].value_counts().unstack()</pre>
+<div><span class="qtag">1.1.1</span><span class="qtag">1.1.5</span><span class="qtag">2.1.4</span></div>
+</div>
+
+<div class="kp">
+<span class="name">df.groupby()</span><span class="freq">考频 ★★★★★（5次+）</span><br>
+<span class="sig">df.groupby('分组列')['值列'].聚合() &nbsp;|&nbsp; .agg(['count','mean']) &nbsp;|&nbsp; .agg({'列':'mean'})</span><br>
+分组聚合，三大用法：单列单聚合、agg 多聚合、dict 多列多聚合。
+<pre><span class="c"># 用法1：分组后取均值（1.1.1）</span>
+bmi_risk_rate = data.groupby('BMIRange')['RiskLevel'].apply(lambda x: (x=='高风险患者').mean())
+
+<span class="c"># 用法2：一次算多个统计量（1.1.2）</span>
+sensor_stats = data.groupby('SensorType')['Value'].agg(['count', 'mean'])
+
+<span class="c"># 用法3：不同列用不同聚合（1.1.5）</span>
+gender_stats = data.groupby('Gender').agg({
+    'Speed': 'mean',
+    'TravelDistance': 'mean',
+    'TravelTime': 'mean'
+})
+
+<span class="c"># 多列分组 + unstack 转宽表（1.1.2）</span>
+location_stats = data.groupby(['Location','SensorType'])['Value'].mean().unstack()</pre>
+<div><span class="qtag">1.1.1</span><span class="qtag">1.1.2</span><span class="qtag">1.1.5</span><span class="qtag">2.1.4</span></div>
+</div>
+
+<div class="kp">
+<span class="name">pd.cut() 分箱</span><span class="freq">考频 ★★★</span><br>
+<span class="sig">pd.cut(数据列, bins=边界列表, labels=标签列表)</span><br>
+把连续数值切分成区间（分箱/年龄段划分）。bins 比 labels 多一个元素。
+<pre><span class="c"># BMI 区间划分（1.1.1）</span>
+bmi_bins = [0, 18.5, 24.9, 29.9, np.inf]
+bmi_labels = ['低于18.5', '18.5～24.9', '25.0～29.9', '高于30.0']
+data['BMIRange'] = pd.cut(data['BMI'], bins=bmi_bins, labels=bmi_labels)
+
+<span class="c"># 年龄段划分（1.1.5）：right=False 表示左闭右开</span>
+data['AgeGroup'] = pd.cut(data['Age'], bins=age_bins, labels=age_labels, right=False)</pre>
+<div><span class="qtag">1.1.1</span><span class="qtag">1.1.5</span></div>
+</div>
+
+<div class="kp">
+<span class="name">len(df) / df.shape / .sum() / .mean()</span><span class="freq">考频 ★★★</span><br>
+<span class="sig">len(df) &nbsp;|&nbsp; df.shape[0] &nbsp;|&nbsp; s.sum() &nbsp;|&nbsp; s.mean()</span><br>
+行数、形状、求和、均值。计算占比的分母用 <code>len(data)</code>。
+<pre>high_risk_ratio = risk_counts['高风险患者'] / len(data)   <span class="c"># 占比（1.1.1）</span>
+print("异常值数量:", data['is_abnormal'].sum())              <span class="c"># True 求和=个数（1.1.2）</span></pre>
+<div><span class="qtag">1.1.1</span><span class="qtag">1.1.2</span></div>
+</div>
+
+<h3>1.4 缺失值与重复值</h3>
+
+<div class="kp">
+<span class="name">df.isnull() / df.isna()</span><span class="freq">考频 ★★★★</span><br>
+<span class="sig">df.isnull().sum() &nbsp;|&nbsp; df.isna().sum()</span><br>
+统计每列缺失值数量。两个方法等价，后面必须接 <code>.sum()</code>。
+<pre>missing_values = data.isna().sum()      <span class="c"># 每列缺失数（1.1.3）</span>
+print(data.isnull().sum())              <span class="c"># 检查缺失（2.1.1）</span></pre>
+<div><span class="qtag">1.1.3</span><span class="qtag">2.1.1</span><span class="qtag">2.1.4</span><span class="qtag">2.1.5</span></div>
+</div>
+
+<div class="kp">
+<span class="name">df.dropna() / s.fillna()</span><span class="freq">考频 ★★★★★（dropna 7次）</span><br>
+<span class="sig">df.dropna() &nbsp;|&nbsp; df.dropna(subset=['列']) &nbsp;|&nbsp; s.fillna(method='ffill')</span><br>
+删缺失行 / 指定列删 / 填充。前向填充 ffill（用上一行填）、后向填充 bfill（用下一行填）、均值填充。
+<pre>data = data.dropna()                              <span class="c"># 删除含缺失的行（1.1.5）</span>
+data = data.dropna(subset=['horsepower'])          <span class="c"># 只按该列删（2.1.1）</span>
+
+<span class="c"># 前向/后向填充（1.1.2）</span>
+data['Value'].fillna(method='ffill', inplace=True)
+data['Value'].fillna(method='bfill', inplace=True)
+
+<span class="c"># 均值填充（2.1.5 提示写法）</span>
+data['列名'].fillna(data['列名'].mean(), inplace=True)</pre>
+<div><span class="qtag">1.1.2</span><span class="qtag">1.1.5</span><span class="qtag">2.1.1</span><span class="qtag">2.1.5</span></div>
+</div>
+
+<div class="kp">
+<span class="name">df.duplicated() / df.drop_duplicates()</span><span class="freq">考频 ★★★★</span><br>
+<span class="sig">df.duplicated().sum() &nbsp;|&nbsp; df.drop_duplicates()</span><br>
+统计重复行数 / 删除重复行。常成对出现：先统计数量再删除。
+<pre>duplicate_values = data.duplicated().sum()    <span class="c"># 重复行数（1.1.3）</span>
+initial_rows = data.shape[0]
+data.drop_duplicates(inplace=True)             <span class="c"># 删除重复（2.1.4）</span>
+print('删除的重复行数:', initial_rows - data.shape[0])</pre>
+<div><span class="qtag">1.1.3</span><span class="qtag">2.1.2</span><span class="qtag">2.1.3</span><span class="qtag">2.1.4</span><span class="qtag">2.1.5</span></div>
+</div>
+
+<h3>1.5 列与类型操作</h3>
+
+<div class="kp">
+<span class="name">df.drop() / df.rename() / df.astype()</span><span class="freq">考频 ★★★★（astype 7次）</span><br>
+<span class="sig">df.drop(columns=['列']) &nbsp;|&nbsp; df.rename(columns={'旧':'新'}) &nbsp;|&nbsp; s.astype(int/float)</span><br>
+删列 / 改列名 / 类型转换。
+<pre>cleaned_data = data.drop(columns=['is_abnormal'])       <span class="c"># 删标记列（1.1.2）</span>
+data.rename(columns={'病人ID': '患者ID'}, inplace=True)  <span class="c"># 改列名（2.1.4）</span>
+data['Age'] = data['Age'].astype(int)                    <span class="c"># 转整型（1.1.5）</span>
+data['Speed'] = data['Speed'].astype(float)              <span class="c"># 转浮点（1.1.5）</span></pre>
+<div><span class="qtag">1.1.2</span><span class="qtag">1.1.3</span><span class="qtag">1.1.4</span><span class="qtag">1.1.5</span><span class="qtag">2.1.4</span></div>
+</div>
+</div>
+
+<!-- ==================== 第二章 上 ==================== -->
+<div class="box" id="ch2a">
+<h2>第二章（上）数据清洗与标注（2.1.1 ~ 2.1.5）</h2>
+<p>考试形式：读数据 → 检查缺失/重复/异常 → 类型转换 → 标准化/归一化 → 划分数据集 → 保存。核心是 <b>sklearn 预处理</b>与<b>数据质量治理</b>。</p>
+
+<h3>2.1 类型转换与安全转换</h3>
+
+<div class="kp">
+<span class="name">pd.to_numeric(errors='coerce')</span><span class="freq">考频 ★★★</span><br>
+<span class="sig">pd.to_numeric(df['列'], errors='coerce')</span><br>
+安全数值转换：无法转换的值变成 NaN（而不是报错），之后配合 <code>dropna</code> 清除。
+<pre><span class="c"># horsepower 列含 '?' 等脏数据（2.1.1）</span>
+data['horsepower'] = pd.to_numeric(data['horsepower'], errors='coerce')
+data = data.dropna(subset=['horsepower'])</pre>
+<div><span class="qtag">2.1.1</span><span class="qtag">2.1.5</span></div>
+</div>
+
+<h3>2.2 异常值处理（IQR 法）</h3>
+
+<div class="kp">
+<span class="name">IQR 四分位距法</span><span class="freq">考频 ★★★（2.1.3 核心）</span><br>
+<span class="sig">Q1 = df.quantile(0.25) &nbsp; Q3 = df.quantile(0.75) &nbsp; IQR = Q3 - Q1</span><br>
+正常范围：<b>[Q1 - 1.5×IQR, Q3 + 1.5×IQR]</b>，范围外视为异常值删除。配套可视化：<code>sns.boxplot</code> 箱线图。
+<pre><span class="c"># 数值列箱线图（2.1.3）</span>
+numeric_cols = data.select_dtypes(include=['float64', 'int64']).columns
+plt.figure(figsize=(12, 8))
+for i, col in enumerate(numeric_cols, 1):
+    plt.subplot(3, 4, i)
+    sns.boxplot(x=data[col])
+    plt.title(col)
+plt.tight_layout()
+plt.show()
+
+<span class="c"># IQR 删除异常值（2.1.3）</span>
+Q1 = data[numeric_cols].quantile(0.25)
+Q3 = data[numeric_cols].quantile(0.75)
+IQR = Q3 - Q1
+data_cleaned = data[~((data[numeric_cols] &lt; (Q1 - 1.5*IQR)) |
+                     (data[numeric_cols] &gt; (Q3 + 1.5*IQR))).any(axis=1)]</pre>
+<div class="qtag">2.1.3</div>
+</div>
+
+<h3>2.3 标准化与归一化（sklearn.preprocessing）</h3>
+
+<div class="kp">
+<span class="name">StandardScaler 标准化</span><span class="freq">考频 ★★★★（fit_transform 5次）</span><br>
+<span class="sig">scaler = StandardScaler(); df[cols] = scaler.fit_transform(df[cols])</span><br>
+变换为均值 0、标准差 1（Z-score）。三步：创建 → fit_transform → 赋值回列。
+<pre>from sklearn.preprocessing import StandardScaler
+numerical_features = ['displacement', 'horsepower', 'weight', 'acceleration']
+scaler = StandardScaler()
+data[numerical_features] = scaler.fit_transform(data[numerical_features])</pre>
+<div><span class="qtag">2.1.1</span><span class="qtag">2.1.2</span></div>
+</div>
+
+<div class="kp">
+<span class="name">MinMaxScaler 归一化</span><span class="freq">考频 ★★★</span><br>
+<span class="sig">scaler = MinMaxScaler(); df[cols] = scaler.fit_transform(df[cols])</span><br>
+缩放到 [0, 1] 区间。用法与 StandardScaler 完全一致，只是类名不同。
+<pre>from sklearn.preprocessing import MinMaxScaler
+columns_to_normalize = ['年龄', '体重', '身高']
+scaler = MinMaxScaler()
+data[columns_to_normalize] = scaler.fit_transform(data[columns_to_normalize])  <span class="c"># 2.1.4</span>
+
+data_cleaned[numeric_cols] = scaler.fit_transform(data_cleaned[numeric_cols])   <span class="c"># 2.1.3</span></pre>
+<div><span class="qtag">2.1.3</span><span class="qtag">2.1.4</span></div>
+</div>
+
+<div class="kp">
+<span class="name">LabelEncoder 标签编码</span><span class="freq">考频 ★★</span><br>
+<span class="sig">encoder = LabelEncoder(); df['列'] = encoder.fit_transform(df['列'])</span><br>
+把分类文字（如"健康/一般/差"）编码成 0/1/2 数字。
+<pre>from sklearn.preprocessing import LabelEncoder
+label_encoder = LabelEncoder()
+data_cleaned['fitness_level'] = label_encoder.fit_transform(
+    data_cleaned['How do you describe your current level of fitness ?'])</pre>
+<div><span class="qtag">2.1.5</span></div>
+</div>
+
+<div class="kp">
+<span class="name">pd.get_dummies() 哑变量</span><span class="freq">考频 ★★★</span><br>
+<span class="sig">X = pd.get_dummies(X) &nbsp;|&nbsp; pd.get_dummies(df, drop_first=True)</span><br>
+把分类变量转为 0/1 指示变量列，机器学习建模前的必备步骤。
+<pre>X = df[['Your gender', 'How important is exercise to you ?']]
+X = pd.get_dummies(X)                        <span class="c"># 2.2.3</span>
+data_cleaned = pd.get_dummies(data_cleaned, drop_first=True)  <span class="c"># 2.2.4</span></pre>
+<div><span class="qtag">2.2.3</span><span class="qtag">2.2.4</span><span class="qtag">2.2.5</span></div>
+</div>
+
+<h3>2.4 日期处理（2.1.4）</h3>
+
+<div class="kp">
+<span class="name">pd.to_datetime() + dt.strftime()</span><span class="freq">考频 ★★</span><br>
+<span class="sig">pd.to_datetime(列).dt.strftime('%Y-%m-%d') &nbsp;|&nbsp; (日期A - 日期B).dt.days</span><br>
+规范日期格式、计算日期差（诊断延迟、病程）。
+<pre>data['就诊日期'] = pd.to_datetime(data['就诊日期']).dt.strftime('%Y-%m-%d')  <span class="c"># 格式化</span>
+data['诊断日期'] = pd.to_datetime(data['诊断日期'])
+data['诊断延迟'] = (data['诊断日期'] - data['就诊日期']).dt.days             <span class="c"># 天数差</span>
+data['病程'] = (datetime(2024, 9, 1) - data['诊断日期']).dt.days            <span class="c"># 距某日天数</span></pre>
+<div><span class="qtag">2.1.4</span></div>
+</div>
+
+<h3>2.5 数据集划分</h3>
+
+<div class="kp">
+<span class="name">train_test_split()</span><span class="freq">考频 ★★★★★（8次，必考）</span><br>
+<span class="sig">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)</span><br>
+<b>固定套路</b>：返回值顺序是 X_train, X_test, y_train, y_test；<code>test_size=0.2</code> 测试集占 20%；<code>random_state=42</code> 保证结果可复现（考试必须写，否则数字对不上）。
+<pre>from sklearn.model_selection import train_test_split
+X = data[selected_features]
+y = data['mpg']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)</pre>
+<div><span class="qtag">2.1.1</span><span class="qtag">2.1.2</span><span class="qtag">2.1.3</span><span class="qtag">2.2.1</span><span class="qtag">2.2.2</span><span class="qtag">2.2.3</span><span class="qtag">2.2.4</span><span class="qtag">2.2.5</span></div>
+</div>
+
+<h3>2.6 可视化基础（matplotlib）</h3>
+
+<div class="kp">
+<span class="name">plt 绘图常用</span><span class="freq">考频 ★★★（2.1.4）</span><br>
+<span class="sig">plt.figure(figsize=(10,6)) · plt.scatter(x,y) · plt.title() · plt.show()</span><br>
+画图四步：建画布 → 画图 → 装饰（标题/轴标签）→ show。中文字体需单独设置。
+<pre>import matplotlib.font_manager as fm
+my_font = fm.FontProperties(fname='C:/Windows/Fonts/simhei.ttf')  <span class="c"># 中文字体</span>
+
+plt.figure(figsize=(10, 6))
+plt.scatter(data['年龄'], data['疾病严重程度'], alpha=0.5)
+plt.title('年龄和疾病严重程度的关系', fontproperties=my_font)
+plt.xlabel('年龄', fontproperties=my_font)
+plt.ylabel('疾病严重程度', fontproperties=my_font)
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+<span class="c"># DataFrame 直接画柱状图（2.1.4）</span>
+treatment_outcome_distribution.plot(kind='bar', stacked=True)</pre>
+<div><span class="qtag">2.1.3</span><span class="qtag">2.1.4</span></div>
+</div>
+
+<h3>2.7 合并与拼接</h3>
+
+<div class="kp">
+<span class="name">pd.concat() / 特征目标合并</span><span class="freq">考频 ★★</span><br>
+<span class="sig">pd.concat([X, y], axis=1) &nbsp;|&nbsp; X.copy() 后加列</span><br>
+保存清洗数据时把特征和目标变量拼回一张表。axis=1 表示按列拼接。
+<pre>cleaned_data = X.copy()
+cleaned_data['mpg'] = y              <span class="c"># 方式1（2.1.1）</span>
+cleaned_data.to_csv('2.1.1_cleaned_data.csv', index=False)
+
+cleaned_data = pd.concat([X, y], axis=1)  <span class="c"># 方式2（2.1.2）</span></pre>
+<div><span class="qtag">2.1.1</span><span class="qtag">2.1.2</span></div>
+</div>
+</div>
+
+<!-- ==================== 第二章 下 ==================== -->
+<div class="box" id="ch2b">
+<h2>第二章（下）模型开发与测试（2.2.1 ~ 2.2.5）</h2>
+<p>考试形式：读数据 → 预处理（哑变量）→ 划分数据 → 训练模型 → 预测 → 保存模型 → 评估指标写报告。流程高度固定，<b>背熟模板即可拿分</b>。</p>
+
+<h3>2.8 模型创建与训练</h3>
+
+<div class="kp">
+<span class="name">四大模型</span><span class="freq">考频 ★★★★★</span><br>
+<span class="sig">LogisticRegression · LinearRegression · RandomForestRegressor · DecisionTreeRegressor / XGBRegressor</span><br>
+分类用逻辑回归；回归用线性回归、随机森林回归、决策树回归、XGBoost。创建后 <code>fit</code> 训练、<code>predict</code> 预测、<code>score</code> 打分。
+<pre><span class="c"># 逻辑回归（分类，2.2.1）</span>
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)
+
+<span class="c"># 线性回归（回归，2.2.2 / 2.2.4）</span>
+pipeline = Pipeline([('scaler', StandardScaler()), ('linreg', LinearRegression())])
+pipeline.fit(X_train, y_train)
+
+<span class="c"># 随机森林回归（2.2.3）</span>
+rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
+rf_model.fit(X_train, y_train)
+
+<span class="c"># 决策树回归（2.2.5）</span>
+dt_model = DecisionTreeRegressor(random_state=42)
+dt_model.fit(X_train, y_train)
+
+<span class="c"># XGBoost 回归（2.2.3 / 2.2.4 改进模型）</span>
+xgb_model = XGBRegressor(n_estimators=1000, learning_rate=0.05, max_depth=5)
+xgb_model.fit(X_train, y_train)</pre>
+<div><span class="qtag">2.2.1</span><span class="qtag">2.2.2</span><span class="qtag">2.2.3</span><span class="qtag">2.2.4</span><span class="qtag">2.2.5</span></div>
+</div>
+
+<div class="kp">
+<span class="name">fit / predict / score</span><span class="freq">考频 ★★★★★（predict 9次）</span><br>
+<span class="sig">model.fit(X_train, y_train) · y_pred = model.predict(X_test) · model.score(X_test, y_test)</span><br>
+训练三连：<b>fit 吃训练集、predict 吃测试集特征、score 吃测试集特征+真实值</b>。
+<pre>model.fit(X_train, y_train)                <span class="c"># 训练</span>
+y_pred = model.predict(X_test)             <span class="c"># 预测</span>
+train_score = model.score(X_train, y_train) <span class="c"># 训练集得分 R²</span>
+test_score = model.score(X_test, y_test)    <span class="c"># 测试集得分 R²</span></pre>
+<div><span class="qtag">2.2.1~2.2.5 全部</span></div>
+</div>
+
+<h3>2.9 模型保存与加载</h3>
+
+<div class="kp">
+<span class="name">pickle / joblib 保存模型</span><span class="freq">考频 ★★★★★（dump 5次）</span><br>
+<span class="sig">pickle.dump(model, file) · joblib.dump(model, '文件.pkl')</span><br>
+两种方式二选一。<b>注意 <code>open</code> 必须是 'wb'（二进制写）</b>。
+<pre><span class="c"># 方式1：pickle（2.2.1 / 2.2.3 / 2.2.5）</span>
+with open('2.2.3_model.pkl', 'wb') as model_file:
+    pickle.dump(rf_model, model_file)
+
+<span class="c"># 方式2：joblib（2.2.4）</span>
+joblib.dump(model, '2.2.4_model.pkl')</pre>
+<div><span class="qtag">2.2.1</span><span class="qtag">2.2.2</span><span class="qtag">2.2.3</span><span class="qtag">2.2.4</span><span class="qtag">2.2.5</span></div>
+</div>
+
+<h3>2.10 评估指标</h3>
+
+<div class="kp">
+<span class="name">回归指标：MSE / MAE / R²</span><span class="freq">考频 ★★★★★（4次）</span><br>
+<span class="sig">mean_squared_error(y_test, y_pred) · r2_score(y_test, y_pred) · mean_absolute_error(...)</span><br>
+均方误差（越小越好）、平均绝对误差（越小越好）、决定系数（越接近 1 越好）。
+<pre>from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+mae = mean_absolute_error(y_test, y_pred)</pre>
+<div><span class="qtag">2.2.2</span><span class="qtag">2.2.3</span><span class="qtag">2.2.4</span><span class="qtag">2.2.5</span></div>
+</div>
+
+<div class="kp">
+<span class="name">分类指标：classification_report / 准确率</span><span class="freq">考频 ★★★（2.2.1）</span><br>
+<span class="sig">classification_report(y_test, y_pred) · (y_test == y_pred).mean()</span><br>
+分类报告（精确率/召回率/F1）；准确率的极简写法。
+<pre>from sklearn.metrics import classification_report
+report = classification_report(y_test, y_pred, zero_division=1)
+accuracy = (y_test == y_pred).mean()    <span class="c"># 准确率</span></pre>
+<div><span class="qtag">2.2.1</span></div>
+</div>
+
+<div class="kp">
+<span class="name">SMOTE 不平衡数据处理</span><span class="freq">考频 ★★（2.2.1）</span><br>
+<span class="sig">smote = SMOTE(random_state=42); X_res, y_res = smote.fit_resample(X_train, y_train)</span><br>
+过采样少数类，处理类别不平衡后重新训练。
+<pre>from imblearn.over_sampling import SMOTE
+smote = SMOTE(random_state=42)
+X_resampled, y_resampled = smote.fit_resample(X_train, y_train)
+model.fit(X_resampled, y_resampled)     <span class="c"># 用平衡后的数据重训</span></pre>
+<div><span class="qtag">2.2.1</span></div>
+</div>
+
+<h3>2.11 结果与报告保存</h3>
+
+<div class="kp">
+<span class="name">预测结果 + 测试报告写文件</span><span class="freq">考频 ★★★★★（每题必考）</span><br>
+<span class="sig">pd.DataFrame(y_pred).to_csv('xx_results.txt') · with open('xx_report.txt','w') 写得分</span><br>
+固定双输出：预测结果存 txt、评估报告存 txt。
+<pre><span class="c"># 预测结果（2.2.3）</span>
+results_df = pd.DataFrame(y_pred, columns=['预测结果'])
+results_df.to_csv('2.2.3_results.txt', index=False)
+
+<span class="c"># 测试报告（2.2.3）</span>
+with open('2.2.3_report.txt', 'w') as report_file:
+    report_file.write(f'训练集得分: {train_score:.4f}\n')
+    report_file.write(f'测试集得分: {test_score:.4f}\n')
+
+<span class="c"># 实际值+预测值对照（2.2.4/2.2.5）</span>
+results = pd.DataFrame({'实际值': y_test, '预测值': y_pred})
+results.to_csv('2.2.4_results.txt', index=False, sep='\t')</pre>
+<div><span class="qtag">2.2.1~2.2.5 全部</span></div>
+</div>
+
+<div class="kp">
+<span class="name">字符串清洗小技巧</span><span class="freq">考频 ★★（2.2.3）</span><br>
+<span class="sig">df.applymap(lambda x: x.strip() if isinstance(x, str) else x) · df.columns.str.strip()</span><br>
+问卷数据常见：单元格前后有空格，建模前统一去除。
+<pre>df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)  <span class="c"># 去所有单元格空格</span>
+df.columns = df.columns.str.strip()                                  <span class="c"># 去列名空格</span></pre>
+<div><span class="qtag">2.2.3</span></div>
+</div>
+</div>
+
+<!-- ==================== 第三章 ==================== -->
+<div class="box" id="ch3">
+<h2>第三章 模型部署与推理（3.2.1 ~ 3.2.4）</h2>
+<p>考试形式：加载 ONNX 模型 → 图片预处理 → 推理 → softmax/argmax 取结果 → 输出预测类别。四道题套路完全一致（ResNet 图像分类 / MNIST 手写数字 / 表情识别 / 花朵识别）。</p>
+
+<h3>3.1 ONNX 模型加载与推理</h3>
+
+<div class="kp">
+<span class="name">onnxruntime.InferenceSession</span><span class="freq">考频 ★★★★★（4题全考）</span><br>
+<span class="sig">session = ort.InferenceSession('模型.onnx') &nbsp;|&nbsp; import onnxruntime as ort</span><br>
+加载 ONNX 模型创建推理会话。<b>别名导入 <code>as ort</code> 是考点</b>。
+<pre>import onnxruntime as ort
+session = ort.InferenceSession('resnet.onnx')        <span class="c"># 3.2.1 图像分类</span>
+ort_session = onnxruntime.InferenceSession('mnist.onnx')  <span class="c"># 3.2.2 手写数字</span></pre>
+<div><span class="qtag">3.2.1</span><span class="qtag">3.2.2</span><span class="qtag">3.2.3</span><span class="qtag">3.2.4</span></div>
+</div>
+
+<div class="kp">
+<span class="name">get_inputs / get_outputs / run</span><span class="freq">考频 ★★★★★（4题全考）</span><br>
+<span class="sig">session.get_inputs()[0].name · session.run([输出名], {输入名: 数据})</span><br>
+获取模型输入输出名 → 执行推理。run 第一个参数传 None 可拿全部输出。
+<pre><span class="c"># 获取输入输出名（3.2.1）</span>
+input_name = session.get_inputs()[0].name
+output_name = session.get_outputs()[0].name
+
+<span class="c"># 推理方式1：指定输出名（3.2.1 / 3.2.4）</span>
+output = session.run([output_name], {input_name: processed_image})[0]
+
+<span class="c"># 推理方式2：None 取全部（3.2.2 / 3.2.3）</span>
+ort_inputs = {ort_session.get_inputs()[0].name: image_array}
+ort_outs = ort_session.run(None, ort_inputs)</pre>
+<div><span class="qtag">3.2.1</span><span class="qtag">3.2.2</span><span class="qtag">3.2.3</span><span class="qtag">3.2.4</span></div>
+</div>
+
+<h3>3.2 图像预处理（PIL）</h3>
+
+<div class="kp">
+<span class="name">Image.open / convert / resize / crop</span><span class="freq">考频 ★★★★★</span><br>
+<span class="sig">Image.open('图.jpg').convert('RGB') · img.resize((w,h)) · img.crop(盒)</span><br>
+RGB 三通道分类模型用 <code>'RGB'</code>；MNIST 灰度图用 <code>'L'</code>。resize 传的是 (宽,高) 元组。
+<pre>image = Image.open('img_test.jpg').convert('RGB')   <span class="c"># 3.2.1</span>
+image = Image.open('img_test.png').convert('L')     <span class="c"># 3.2.2 灰度</span>
+
+<span class="c"># 经典 ResNet 预处理：缩放→中心裁剪（3.2.1）</span>
+image = image.resize((256, 256), Image.BILINEAR)
+w, h = image.size
+left = (w - 224) / 2
+top = (h - 224) / 2
+image = image.crop((left, top, left + 224, top + 224))
+
+<span class="c"># MNIST：缩放到 28×28（3.2.2）</span>
+image = image.resize((28, 28))</pre>
+<div><span class="qtag">3.2.1</span><span class="qtag">3.2.2</span><span class="qtag">3.2.3</span><span class="qtag">3.2.4</span></div>
+</div>
+
+<div class="kp">
+<span class="name">转数组 + 归一化 + 维度变换</span><span class="freq">考频 ★★★★</span><br>
+<span class="sig">np.array(img, dtype=np.float32) · /255.0 · np.transpose · np.expand_dims</span><br>
+图像 → 模型输入四步：<b>转 float32 数组 → 除 255 → 减均值除标准差 → 变换维度 (C,H,W) + 加 batch 维</b>。
+<pre>image = np.array(image).astype(np.float32)   <span class="c"># ① 转 float32 数组</span>
+image = image / 255.0                        <span class="c"># ② 缩放到 [0,1]</span>
+image = (image - mean) / std                 <span class="c"># ③ 标准化（mean/std 按模型定）</span>
+image = np.transpose(image, (2, 0, 1))       <span class="c"># ④ HWC → CHW（3.2.1）</span>
+image = image.reshape((1,) + image.shape)    <span class="c"># 加 batch 维 (1,C,H,W)</span>
+
+<span class="c"># MNIST 灰度图两次 expand_dims（3.2.2）</span>
+image_array = np.array(image, dtype=np.float32)
+image_array = np.expand_dims(image_array, axis=0)  <span class="c"># batch 维</span>
+image_array = np.expand_dims(image_array, axis=0)  <span class="c"># channel 维</span></pre>
+<div><span class="qtag">3.2.1</span><span class="qtag">3.2.2</span><span class="qtag">3.2.3</span><span class="qtag">3.2.4</span></div>
+</div>
+
+<h3>3.3 推理结果后处理</h3>
+
+<div class="kp">
+<span class="name">softmax / argmax / argsort</span><span class="freq">考频 ★★★★</span><br>
+<span class="sig">scipy.special.softmax(output, axis=-1) · np.argmax(out) · np.argsort(x)[-5:][::-1]</span><br>
+模型原始输出是 logits，softmax 转概率；argmax 取最大概率类别；argsort 取 Top-K。
+<pre><span class="c"># softmax 转概率（3.2.1）</span>
+probabilities = scipy.special.softmax(output, axis=-1)
+
+<span class="c"># Top-5 类别（3.2.1）：argsort 升序取后5个再反转</span>
+top5_idx = np.argsort(probabilities[0])[-5:][::-1]
+top5_prob = probabilities[0][top5_idx]
+
+<span class="c"># 直接取最大（3.2.2 / 3.2.4）</span>
+predicted_class = np.argmax(ort_outs[0])
+
+<span class="c"># 概率转百分比（3.2.4）</span>
+prob_percentage = accuracy[0, predicted_idx] * 100</pre>
+<div><span class="qtag">3.2.1</span><span class="qtag">3.2.2</span><span class="qtag">3.2.3</span><span class="qtag">3.2.4</span></div>
+</div>
+
+<div class="kp">
+<span class="name">标签文件读取</span><span class="freq">考频 ★★★</span><br>
+<span class="sig">with open('labels.txt') as f: labels = [line.strip() for line in f.readlines()]</span><br>
+类别索引 → 类别名称的映射。列表推导式逐行去换行符。
+<pre>labels_path = 'labels.txt'
+with open(labels_path) as f:
+    labels = [line.strip() for line in f.readlines()]
+print(f"预测类别: {labels[predicted_idx]}")</pre>
+<div><span class="qtag">3.2.1</span><span class="qtag">3.2.4</span></div>
+</div>
+</div>
+
+<!-- ==================== 速查表 ==================== -->
+<div class="box" id="freq">
+<h2>高频考点速查表（按考频排序）</h2>
+<table>
+<tr><th>考点</th><th>所属模块</th><th>考频</th><th>一句话用法</th></tr>
+<tr><td><code>to_csv(file, index=False)</code></td><td>数据保存</td><td>12次</td><td>保存结果，必须 index=False</td></tr>
+<tr><td><code>pd.read_csv / read_excel</code></td><td>数据读取</td><td>11次</td><td>中文乱码加 encoding='gbk'</td></tr>
+<tr><td><code>model.predict(X_test)</code></td><td>模型</td><td>9次</td><td>预测测试集</td></tr>
+<tr><td><code>train_test_split(X, y, test_size=0.2, random_state=42)</code></td><td>数据划分</td><td>8次</td><td>固定写法，顺序 X_train, X_test, y_train, y_test</td></tr>
+<tr><td><code>dropna()</code></td><td>缺失值</td><td>7次</td><td>删除缺失行，可 subset=['列']</td></tr>
+<tr><td><code>astype(int/float)</code></td><td>类型</td><td>7次</td><td>类型转换</td></tr>
+<tr><td><code>head()</code></td><td>概览</td><td>6次</td><td>看前5行</td></tr>
+<tr><td><code>value_counts()</code></td><td>统计</td><td>5次</td><td>频次统计（拼写带s）</td></tr>
+<tr><td><code>groupby().agg()/.mean()</code></td><td>统计</td><td>5次</td><td>分组聚合</td></tr>
+<tr><td><code>scaler.fit_transform()</code></td><td>预处理</td><td>5次</td><td>StandardScaler / MinMaxScaler</td></tr>
+<tr><td><code>pickle.dump / joblib.dump</code></td><td>模型保存</td><td>5次</td><td>open 用 'wb'</td></tr>
+<tr><td><code>between(a, b)</code></td><td>审核</td><td>4次</td><td>范围判断，含边界</td></tr>
+<tr><td><code>mean_squared_error / r2_score</code></td><td>评估</td><td>4次</td><td>回归两大指标</td></tr>
+<tr><td><code>InferenceSession / session.run</code></td><td>部署</td><td>4次</td><td>ONNX 加载与推理</td></tr>
+<tr><td><code>np.where(条件, 真, 假)</code></td><td>条件</td><td>2次+</td><td>向量化 if-else，三个参数</td></tr>
+<tr><td><code>pd.cut(x, bins, labels)</code></td><td>分箱</td><td>3次</td><td>连续值→区间标签</td></tr>
+<tr><td><code>get_dummies()</code></td><td>预处理</td><td>3次</td><td>分类变量→0/1 哑变量</td></tr>
+<tr><td><code>softmax / argmax</code></td><td>部署</td><td>4次</td><td>logits→概率→类别</td></tr>
+</table>
+</div>
+
+<!-- ==================== 模板 ==================== -->
+<div class="box" id="tpl">
+<h2>考试代码模板（背这四段）</h2>
+
+<div class="tpl">
+<h4>模板一：数据处理题（1.1.x）</h4>
+<pre>import pandas as pd
+import numpy as np
+
+data = pd.read_csv('xxx.csv')                       <span class="c"># ① 读数据</span>
+print(data.head())                                   <span class="c"># ② 概览</span>
+
+data['标记列'] = np.where(data['值'] &gt; 阈值, 'A', 'B')  <span class="c"># ③ 条件标记</span>
+counts = data['标记列'].value_counts()                <span class="c"># ④ 频次统计</span>
+ratio = counts['A'] / len(data)                      <span class="c"># ⑤ 占比</span>
+
+data['区间'] = pd.cut(data['值'], bins=bins, labels=labels)   <span class="c"># ⑥ 分箱</span>
+stats = data.groupby('区间')['标记列'].apply(lambda x: (x=='A').mean())  <span class="c"># ⑦ 分组统计</span>
+
+data.to_csv('结果.csv', index=False)                 <span class="c"># ⑧ 保存</span></pre>
+</div>
+
+<div class="tpl">
+<h4>模板二：清洗标注题（2.1.x）</h4>
+<pre>import pandas as pd
+from sklearn.preprocessing import StandardScaler   <span class="c"># 或 MinMaxScaler / LabelEncoder</span>
+from sklearn.model_selection import train_test_split
+
+data = pd.read_csv('xxx.csv')                        <span class="c"># ① 读数据</span>
+print(data.isnull().sum())                           <span class="c"># ② 缺失检查</span>
+data = data.dropna()                                 <span class="c"># ③ 删缺失</span>
+print(data.duplicated().sum())                       <span class="c"># ④ 重复检查</span>
+data = data.drop_duplicates()                        <span class="c"># ⑤ 删重复</span>
+data['数值列'] = pd.to_numeric(data['数值列'], errors='coerce')  <span class="c"># ⑥ 安全转换</span>
+
+scaler = StandardScaler()                            <span class="c"># ⑦ 标准化</span>
+data[数值列们] = scaler.fit_transform(data[数值列们])
+
+X = data[特征列]; y = data[目标列]                    <span class="c"># ⑧ 特征目标</span>
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+data.to_csv('cleaned.csv', index=False)              <span class="c"># ⑨ 保存</span></pre>
+</div>
+
+<div class="tpl">
+<h4>模板三：模型开发题（2.2.x）</h4>
+<pre>import pandas as pd, pickle
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression    <span class="c"># 按题换模型</span>
+from sklearn.metrics import mean_squared_error, r2_score
+
+df = pd.read_csv('xxx.csv')                          <span class="c"># ① 读数据</span>
+X = pd.get_dummies(df[特征列])                        <span class="c"># ② 哑变量</span>
+y = df[目标列]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)  <span class="c"># ③</span>
+
+model = LinearRegression()                           <span class="c"># ④ 建模型</span>
+model.fit(X_train, y_train)                          <span class="c"># ⑤ 训练</span>
+
+with open('x.x.x_model.pkl', 'wb') as f:             <span class="c"># ⑥ 存模型</span>
+    pickle.dump(model, f)
+
+y_pred = model.predict(X_test)                       <span class="c"># ⑦ 预测</span>
+pd.DataFrame(y_pred, columns=['预测结果']).to_csv('x.x.x_results.txt', index=False)
+
+with open('x.x.x_report.txt', 'w') as f:             <span class="c"># ⑧ 评估报告</span>
+    f.write(f'均方误差: {mean_squared_error(y_test, y_pred)}\n')
+    f.write(f'决定系数: {r2_score(y_test, y_pred)}\n')</pre>
+</div>
+
+<div class="tpl">
+<h4>模板四：部署推理题（3.2.x）</h4>
+<pre>import onnxruntime as ort
+import numpy as np
+from PIL import Image
+import scipy.special
+
+session = ort.InferenceSession('model.onnx')         <span class="c"># ① 加载模型</span>
+input_name = session.get_inputs()[0].name            <span class="c"># ② 输入名</span>
+output_name = session.get_outputs()[0].name
+
+image = Image.open('test.jpg').convert('RGB')        <span class="c"># ③ 读图（灰度用 'L'）</span>
+img = np.array(预处理(image), dtype=np.float32)       <span class="c"># ④ resize/归一化/变维</span>
+
+output = session.run([output_name], {input_name: img})[0]  <span class="c"># ⑤ 推理</span>
+
+probabilities = scipy.special.softmax(output, axis=-1)     <span class="c"># ⑥ softmax</span>
+predicted_idx = np.argmax(probabilities)                    <span class="c"># ⑦ 取最大</span>
+
+with open('labels.txt') as f:
+    labels = [line.strip() for line in f.readlines()]
+print(f"预测类别: {labels[predicted_idx]}")                  <span class="c"># ⑧ 查标签输出</span></pre>
+</div>
+</div>
+
+<!-- ==================== 易错点 ==================== -->
+<div class="box" id="pit">
+<h2>易错点清单（考前过一遍）</h2>
+
+<div class="warn"><b>1. value_counts 拼写</b>：不是 value_count / values_count。结尾有 <b>s</b>。真题至少 6 处考到。</div>
+<div class="warn"><b>2. to_csv 忘写 index=False</b>：会多一列行号，评分对照输出会不一致。</div>
+<div class="warn"><b>3. train_test_split 返回顺序</b>：<code>X_train, X_test, y_train, y_test</code>——X 在前 y 在后，train 在前 test 在后。写反了后面全错。</div>
+<div class="warn"><b>4. random_state=42 必须写</b>：不写则每次划分不同，输出的得分/统计数字与标准答案对不上。</div>
+<div class="warn"><b>5. pickle.dump 的 open 模式是 'wb'</b>（二进制写）；报告 txt 用 'w'（文本写）。用错直接报错。</div>
+<div class="warn"><b>6. np.where 必须三个参数</b>：条件、真值、假值。只写两个会报错。</div>
+<div class="warn"><b>7. 多条件组合要加括号</b>：<code>(a&gt;1) &amp; (b&lt;2)</code>，且用 <code>&amp;</code> <code>|</code>（不是 and / or）。</div>
+<div class="warn"><b>8. between 含边界</b>：between(18, 70) 包含 18 和 70。左闭右开需求用 pd.cut(right=False)。</div>
+<div class="warn"><b>9. Image.ANTIALIAS 已废弃</b>：新版 Pillow 用 <code>Image.LANCZOS</code>（3.2.3 真题，参考代码原文即此坑）。</div>
+<div class="warn"><b>10. 灰度图 convert('L')、彩色图 convert('RGB')</b>：MNIST 用 'L'，ResNet/花朵用 'RGB'，用错维度不匹配。</div>
+<div class="warn"><b>11. 中文乱码</b>：read_csv 加 encoding='gbk'；matplotlib 中文标题用 FontProperties(fname='C:/Windows/Fonts/simhei.ttf')。</div>
+<div class="warn"><b>12. groupby 后接什么</b>：接 ['列'].mean() 或 .agg([...]) 或 .apply(lambda)，不能直接 groupby 完就完事。</div>
+<div class="warn"><b>13. 2.1.4 参考代码笔误</b>：原文 <code>plt.scatter(figsize=(10,6))</code> 是错的（scatter 不接受 figsize），正确写法 <code>plt.figure(figsize=(10,6))</code>。</div>
+<div class="warn"><b>14. 保存模型 vs 保存结果</b>：模型 .pkl 用 pickle/joblib；预测结果 .txt 用 DataFrame.to_csv。两个文件都要交。</div>
+<div class="warn"><b>15. ipynb 做题纪律</b>：只在下划线处填代码，别改其他源码；运行全部单元格后 Ctrl+S 保存，再按题目要求截图（只截输出结果部分）。</div>
+
+<p class="note" style="margin-top:16px">本资料基于 19 道编程真题的参考答案自动分析生成，考点后标注的题号即该知识点在真题中的出处。配合 <b>答题页面.html</b>（在线填空判分）与 <b>对答案.bat</b>（Jupyter 实跑核对）使用效果更佳。祝考试顺利！</p>
+</div>
+
+</div>
+</body>
+</html>
